@@ -1,0 +1,82 @@
+openapi: 3.0.1
+info:
+   title: "Photo Sharing Service"
+   version: "1.0.0"
+   description: "By Edwin Torres"
+servers:
+   - url: "http://localhost:3000/api"
+     description: "localhost"
+   - url: "https://{domain}/api"
+     description: "Production Server"
+     variables:
+        domain:
+           default: "localhost:3000"
+           description: "Domain"
+paths:
+   /image:
+      get:
+         summary: "To fetch one image, one single image"
+         description: ""
+         tags:
+            - Images
+         responses:
+            200:
+               description: OK
+               content:
+                  application/json:
+                     schema:
+                        allOf:
+                           - type: object
+                             properties:
+                                imageURIs:
+                                   type: array
+                                   items:
+                                      type: string
+                                statusCode:
+                                   type: integer
+                             required:
+                                - imageURIs
+                                - statusCode
+            418:
+               description: "Invalid input"
+      post:
+         summary: "Send one image"
+         description: ""
+         tags:
+            - Images
+         requestBody:
+            required: true
+            content:
+               multiport/form-data:
+                  schema:
+                     additionalProperties: false
+                     type: object
+                     properties:
+                        image:
+                           type: string
+                           format: binary
+                     required:
+                        - image
+         responses:
+            200:
+               description: OK
+               content:
+                  application/json:
+                     schema:
+                        allOf:
+                           - type: object
+                             properties:
+                                imageURI:
+                                   type: string
+                                statusCode:
+                                   type: integer
+                             required:
+                                - imageURI
+                                - statusCode
+            400:
+               description: "You didn't provide an image type"
+            405:
+               description: "Validation exception"
+externalDocs:
+   description: "Find out more about Swagger"
+   url: "http://swagger.io"
